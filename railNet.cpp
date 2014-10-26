@@ -35,8 +35,8 @@ struct VertexNode
 class highSpeedRail
 {
 public:
-         highSpeedRail(int , int );        
-         //highSpeedRail(string );                                 //for file input
+         highSpeedRail(string);                                 //for file input
+		 highSpeedRail(int , int );                
          ~highSpeedRail(){};                                                //析构函数
 		 bool isExisted(string );                                 //站点station是否存在
 		 int getIndex(string );                                                 //获得站点的索引
@@ -56,13 +56,11 @@ private:
 /***********************************************************/                      
 highSpeedRail::highSpeedRail(int n, int e)
 {
-   //ifstream in("rail.txt");    //存放站点信息的txt文件
-   //ofstream out("rail.txt");    
+   
    string station;              //站点名
    staNum = 0;                  //
    railWay = e; 
-   /*if(in)                    //如果存在rail.txt文件
-   {  */
+   
        for(int i = 0; i< n ; i++)   //输入顶点信息，即站点信息，初始化站点表
 	   {  
 		   cout<<"\n请输入第"<<staNum+1<<"个站点的名称："<<endl;
@@ -72,7 +70,7 @@ highSpeedRail::highSpeedRail(int n, int e)
 		     cout<<"该站台已存在，请重新输入:"<<endl;
 			 cin>>station;
 		   }
-		   //out<<station<<endl;                  //将站台名存入文件
+	
            adjlist[i].vertex = station;
            adjlist[i].firstedge = NULL;
            adjlist[i].count = 0;
@@ -83,7 +81,7 @@ highSpeedRail::highSpeedRail(int n, int e)
 	   {  
 	        string station1,station2;
 			int cost;
-			//输入线路所连接的两站台i,j
+			//输入线路所连接的两站台station1,station2
 			cout<<endl<<"输入两个站台的名字和站台之间的距离(单位：km)"<<endl;
 	        cin>>station1;
 		    cin>>station2;
@@ -101,18 +99,92 @@ highSpeedRail::highSpeedRail(int n, int e)
 	           adjlist[j].count ++;
 			}
 			else
-				cout<<"站台名不存在"<<endl;
+				cout<<"站台名不存在！"<<endl;
+	   }
+
+}
+
+/***********************************************************/
+/* Construction function to build a network                */
+/* with input from file                                    */
+/***********************************************************/   
+highSpeedRail::highSpeedRail(string g)
+{
+
+   ifstream infile;
+   infile.open(g.c_str());
+   if (infile == NULL)
+   {
+       cout<<"\nCannot open input file!\n"<<endl;
+       exit(1);
+   }
+   int n; 
+   infile>>n;
+
+   infile>>railWay;
+
+   string station;              //站点名
+   staNum = 0;                  //
+    
+       for(int i = 0; i< n ; i++)   //输入顶点信息，即站点信息，初始化站点表
+	   {  
+	       infile>>station;
+           if(isExisted(station))//存在该站点时
+		   {
+		       cout<<station<<" 站台已存在，输入文件内容错误！"<<endl;
+			   exit(1);
+		   }
+
+           adjlist[i].vertex = station;
+
+           adjlist[i].firstedge = NULL;
+           adjlist[i].count = 0;
+           
+           staNum ++;
+	  }
+
+       for(int k = 0; k < railWay ; k++)    //从第一个站点开始添加与其连通的站点
+	   {  
+	        string station1,station2;
+			int cost;
+
+			infile>>station1;
+			infile>>station2;
+			infile>>cost;
+		
+			if(isExisted(station1) && isExisted(station2)) 
+            {
+			   ArcNode *s =new ArcNode;
+			   int i = getIndex(station2);
+       	       s->adjvex =i;                     //建立一个新的边表结点，即新的线路
+               s->distance=cost;
+			   s->next = NULL;                 
+			   int j = getIndex(station1);
+	           s->next = adjlist[j].firstedge;   //将结点插入到第j个边表的表头
+	           adjlist[j].firstedge = s;  
+	           adjlist[j].count ++;
+			}
+			else if(isExisted(station1))
+			{
+				cout<<station2<<" 站台名不存在，输入文件内容错误！"<<endl;
+				exit(1);
+			}
+			else if(isExisted(station2))
+			{
+				cout<<station1<<" 站台名不存在，输入文件内容错误！"<<endl;
+				exit(1);
+			}
+			else 
+			{
+				cout<<station1 << " "<<station2<<" 站台名不存在，输入文件内容错误！"<<endl;
+				exit(1);
+			}				
 	   }
    
-      /* 
-	   in.close();
-	   out.close();
-   }
-   else 
-   {
-	   cout<<"不存在rail.txt文件"<<endl;
-   }*/
+   	   infile.close();
+
 }
+
 
 /*****************************************************/
 /* This is a program to determine whether station is */
@@ -212,6 +284,7 @@ void highSpeedRail::getDistance(string station1, string station2)
 	
 	while(sum < staNum)//sum = staNum, all node is known,如果能删除站点，这里不要这么写 
 	{
+		s = 0;
 		while(known[s])
 		{
 			s++;
@@ -241,6 +314,7 @@ void highSpeedRail::getDistance(string station1, string station2)
 		
 		sum++;
 	}
+	
 	if(dis[b] != 0x3f3f3f3f)
 	{
 		cout << endl << station1 << " 到 " << station2 <<" 的距离为 " << dis[b] << " km." << endl; 
@@ -253,7 +327,8 @@ void highSpeedRail::getDistance(string station1, string station2)
 }
 int main()
 {
-   highSpeedRail hsr(5,5);
+   //highSpeedRail hsr(5,5);
+   highSpeedRail hsr("input.txt"); 
    hsr.getDistance("广州","北京");
    return 0;
 }
