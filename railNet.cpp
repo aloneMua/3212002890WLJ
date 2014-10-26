@@ -7,27 +7,36 @@ using namespace std;
 
 const int Maxsize = 1000;    //最大值为1000
 
-struct ArcNode              //定义边表结点
+/***************************************/
+/* 定义边表结点                        */
+/***************************************/ 
+struct ArcNode              
 {            
         int adjvex;         //邻接点域
 		int distance;       //权值
 		ArcNode*next;       //指针域，指向边表的下一个结点
 };
 
-struct VertexNode           //定义边表顶点
+/***************************************/
+/* 定义边表顶点                        */
+/***************************************/ 
+struct VertexNode           
 {
     string vertex;             //数据域，存放顶点信息
 	ArcNode*firstedge;      //指针域，指向边表中第一个结点
 };
 
-
+/***********************************************/
+/* declaration of haghSpeddRail class          */
+/***********************************************/
 class highSpeedRail
 {
 public:
-         highSpeedRail(string array[],int n, int e);        //构造函数，建立一个有n个站点，e条线路的高铁网络图
+         highSpeedRail(int , int );        
+         highSpeedRail(string );//for file input
          ~highSpeedRail();                                                //析构函数
-		 bool isExisted(string station);                                 //站点station是否存在
-		 int getIndex(string staion);                                                 //获得站点的索引
+		 bool isExisted(string );                                 //站点station是否存在
+		 int getIndex(string );                                                 //获得站点的索引
          void addStation();                                              //增加一个站台
 		 void addRailWay();                                              //增加一条高铁线路
          
@@ -37,14 +46,18 @@ private:
 		int staNum;                              //高铁网站点数
 		int railWay;                             //高铁网中线路数
 };
-//构造函数，建立一个有n个站点，e条线路的高铁网络图
-highSpeedRail::highSpeedRail(string array[],int n, int e)
+
+/***********************************************************/
+/* Construction function to build a network                */
+/* with n station and e edges                              */
+/***********************************************************/                      
+highSpeedRail::highSpeedRail(int n, int e)
 {  
-   ifstream in("rail.txt");    //存放站点信息的txt文件
-   ofstream out("rail.txt");    
+   //ifstream in("rail.txt");    //存放站点信息的txt文件
+   //ofstream out("rail.txt");    
    string station;              //站点名
      
-   if(in)                    //如果存在rail.txt文件
+   //if(in)                    //如果存在rail.txt文件
    {
        for(int i = 0; i< n ; i++)   //输入顶点信息，即站点信息，初始化站点表
 	   {  
@@ -53,9 +66,9 @@ highSpeedRail::highSpeedRail(string array[],int n, int e)
            while(isExisted(station))//存在该站点时
 		   {
 		     cout<<"该站台已存在，请重新输入:"<<endl;
-			 cin>>i>>".">>station;
+			 cin>>station;
 		   }
-		   out<<station<<endl;                  //将站台名存入文件
+		   //out<<station<<endl;                  //将站台名存入文件
            adjlist[i].vertex = station;
            adjlist[i].firstedge = NULL;
 	  }
