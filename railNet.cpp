@@ -3,6 +3,7 @@
 #include<string>
 #include<cstring>
 #include<iostream>
+
 using namespace std;
 
 
@@ -24,6 +25,7 @@ struct ArcNode
 struct VertexNode           
 {
     string vertex;             //数据域，存放顶点信息
+    int count;
 	ArcNode*firstedge;      //指针域，指向边表中第一个结点
 };
 
@@ -35,7 +37,7 @@ class highSpeedRail
 public:
          highSpeedRail(int , int );        
          //highSpeedRail(string );                                 //for file input
-         ~highSpeedRail();                                                //析构函数
+         ~highSpeedRail(){};                                                //析构函数
 		 bool isExisted(string );                                 //站点station是否存在
 		 int getIndex(string );                                                 //获得站点的索引
          void addStation(string );                                              //增加一个站台
@@ -53,7 +55,7 @@ private:
 /* with n station and e edges                              */
 /***********************************************************/                      
 highSpeedRail::highSpeedRail(int n, int e)
-{  
+{
    //ifstream in("rail.txt");    //存放站点信息的txt文件
    //ofstream out("rail.txt");    
    string station;              //站点名
@@ -73,6 +75,7 @@ highSpeedRail::highSpeedRail(int n, int e)
 		   //out<<station<<endl;                  //将站台名存入文件
            adjlist[i].vertex = station;
            adjlist[i].firstedge = NULL;
+           adjlist[i].count = 0;
            staNum ++;
 	  }
    
@@ -81,7 +84,7 @@ highSpeedRail::highSpeedRail(int n, int e)
 	        string station1,station2;
 			int cost;
 			//输入线路所连接的两站台i,j
-			cout<<"输入两个站台的名字和站台之间的距离"<<endl;
+			cout<<endl<<"输入两个站台的名字和站台之间的距离(单位：km)"<<endl;
 	        cin>>station1;
 		    cin>>station2;
 			cin>>cost; 
@@ -90,10 +93,12 @@ highSpeedRail::highSpeedRail(int n, int e)
 			   ArcNode *s =new ArcNode;
 			   int i = getIndex(station2);
        	       s->adjvex =i;                     //建立一个新的边表结点，即新的线路
-               s->distance=cost;                 
+               s->distance=cost;
+			   s->next = NULL;                 
 			   int j = getIndex(station1);
 	           s->next = adjlist[j].firstedge;   //将结点插入到第j个边表的表头
 	           adjlist[j].firstedge = s;  
+	           adjlist[j].count ++;
 			}
 			else
 				cout<<"站台名不存在"<<endl;
@@ -114,7 +119,7 @@ highSpeedRail::highSpeedRail(int n, int e)
 /* existed.                                          */
 /*****************************************************/
 bool highSpeedRail::isExisted(string station)
-{   	
+{  
 	for(int i = 0;i<staNum;i++)// determine if the station is existed	
 	    if(adjlist[i].vertex == station)
 	        return 1;
@@ -148,6 +153,7 @@ void highSpeedRail::addStation(string station)
 	    return ;
 	}
 	// no problem , add it
+	//如果能删除站点，这里不要这么写！！！ 
 	adjlist[staNum].vertex = station;
     adjlist[staNum].firstedge = NULL;
     staNum ++;
@@ -194,16 +200,60 @@ void highSpeedRail::getDistance(string station1, string station2)
 	
 	bool known[Maxsize]; //to indicate whether the shortest distance to a vertix is known 
 	int dis[Maxsize];    //to store temporary shortest distance from station1 to a vertix
-	
+	int sum = 0;         //to determine whether  is time to stop
 	//initialization
 	memset(known,0,sizeof(known));
-	memset(dis,0x3f,sizeof(dis));	
-	known[a] = 1;
+	memset(dis,0x3f,sizeof(dis));		
 	dis[a] = 0;
 	
+	//dijkstra algorithm
+	ArcNode *tmp;
+	int s,t,v;
+	
+	while(sum < staNum)//sum = staNum, all node is known,如果能删除站点，这里不要这么写 
+	{
+		while(known[s])
+		{
+			s++;
+		}
+		
+		for(int i = 0; i < staNum ; i++)//find the smallest distance to the current graph
+		{
+			if(known[i] == 0 && dis[s] > dis[i] ) 
+			{
+			    s = i;
+			}
+		}
+		known[s] = 1; 
+		tmp = adjlist[s].firstedge;
+
+		for(int i = 0 ;i < adjlist[s].count; i++,tmp = tmp->next)// update the distance
+		{
+			
+			t = tmp->adjvex;
+			v = tmp->distance;
+			if(dis[t] > dis[s] + v)
+			{
+				dis[t] = dis[s] + v;
+			}
+			
+		}
+		
+		sum++;
+	}
+	if(dis[b] != 0x3f3f3f3f)
+	{
+		cout << endl << station1 << " 到 " << station2 <<"的距离为" << dis[b] << " km." << endl; 
+	}
+	else
+	{
+		cout << endl << "错误！" << station1 << " 无法到达 " << station2 <<endl; 
+	}
 	
 }
 int main()
 {
+   highSpeedRail hsr(5,5);
+   hsr.getDistance("guangzhou","beijing");
    return 0;
 }
