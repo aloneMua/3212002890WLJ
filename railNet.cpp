@@ -243,7 +243,7 @@ void highSpeedRail::getDistance(string station1, string station2)
 	}
 	if(dis[b] != 0x3f3f3f3f)
 	{
-		cout << endl << station1 << " 到 " << station2 <<"的距离为" << dis[b] << " km." << endl; 
+		cout << endl << station1 << " 到 " << station2 <<" 的距离为 " << dis[b] << " km." << endl; 
 	}
 	else
 	{
@@ -254,6 +254,6 @@ void highSpeedRail::getDistance(string station1, string station2)
 int main()
 {
    highSpeedRail hsr(5,5);
-   hsr.getDistance("guangzhou","beijing");
+   hsr.getDistance("广州","北京");
    return 0;
 }
