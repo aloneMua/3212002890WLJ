@@ -78,19 +78,19 @@ highSpeedRail::highSpeedRail(int n, int e)
 	        string station1,station2;
 			int cost;
 			//输入线路所连接的两站台i,j
-			cout<<"输入两个站台的名字："<<endl;
+			cout<<"输入两个站台的名字和站台之间的距离"<<endl;
 	        cin>>station1;
-		    cin>>station2; 
+		    cin>>station2;
+			cin>>cost; 
 			if(isExisted(station1)&&isExisted(station2)) 
             {
 			   ArcNode *s =new ArcNode;
 			   int i = getIndex(station2);
        	       s->adjvex =i;                     //建立一个新的边表结点，即新的线路
-		       cout<<"\n请输入站台"<<station1<<"和站台"<<station2<<"之间的距离："<<endl;
-               cin>>cost;
                s->distance=cost;                 
 			   int j = getIndex(station1);
-	           s->next = adjlist[j].firstedge;   //将结点插入到第i个边表的表头
+	           s->next = adjlist[j].firstedge;   //将结点插入到第j个边表的表头
+	           adjlist[j].firstedge = s;  
 			}
 			else
 				cout<<"站台名不存在"<<endl;
@@ -98,8 +98,8 @@ highSpeedRail::highSpeedRail(int n, int e)
    
        staNum = n;
        railWay = e;
-	   in.close();
-	   out.close();
+	  // in.close();
+	  // out.close();
    }
    else 
    {
