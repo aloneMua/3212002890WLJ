@@ -227,7 +227,7 @@ void highSpeedRail::getDistance(string station1, string station2)
 		known[s] = 1; 
 		tmp = adjlist[s].firstedge;
 
-		for(int i = 0 ;i < adjlist[s].count; i++,tmp = tmp->next)// update the distance
+		for(int j = 0 ;j < adjlist[s].count; j++,tmp = tmp->next)// update the distance
 		{
 			
 			t = tmp->adjvex;
