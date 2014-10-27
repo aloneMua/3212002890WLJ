@@ -1,3 +1,6 @@
+/*************************************************************/
+/* This is a program to build a high speed railway simulator */
+/*************************************************************/
 #include<cstdio>
 #include<fstream>
 #include<string>
