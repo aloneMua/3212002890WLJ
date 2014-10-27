@@ -3,7 +3,7 @@
 #include<string>
 #include<cstring>
 #include<iostream>
-
+#include "windows.h"
 using namespace std;
 
 
@@ -49,6 +49,192 @@ private:
 		int staNum;                              //高铁网站点数
 		int railWay;                             //高铁网中线路数
 };
+highSpeedRail hsr("input.txt"); //initialization
+void menu();
+void menu1();
+void menu2();
+void menu3();
+/***********************************************************/
+/* This is a function to build a highSpeedRail instance    */
+/* and display a menu to make operations                   */
+/* on highSpeedRail instance for users for convenience.    */
+/***********************************************************/   
+void menu()
+{
+	int no; 
+	system("cls");//清屏 
+	//string string1, string2;
+	cout<<"                    欢迎进入高铁管理系统"<<endl;
+	cout<<endl<<endl<<"1、增加站台"<<endl;
+	cout<<endl<<"2、增加线路"<<endl;
+	cout<<endl<<"3、站点最短距离查询"<<endl;
+	cout<<endl<<"4、清空所有数据"<<endl;
+	cout<<endl<<"5、退出系统"<<endl;
+	cout<<endl<<endl<<endl<<"请输入要进行的操作编号："<<endl;
+	
+	while(1)
+	{
+	//cin>>no,no!=5
+	system("cls");//清屏 
+	//string string1, string2;
+	cout<<"                        欢迎进入高铁管理系统"<<endl;
+	cout<<endl<<endl<<"1、增加站台"<<endl;
+	cout<<endl<<"2、增加线路"<<endl;
+	cout<<endl<<"3、站点最短距离查询"<<endl;
+	cout<<endl<<"4、清空所有数据"<<endl;
+	cout<<endl<<"5、退出系统"<<endl;
+	cout<<endl<<endl<<endl<<"请输入要进行的操作编号："<<endl;
+	cin>>no;
+	if(no == 1)
+	{
+		menu1();
+		
+	}
+	if(no == 2)
+	{
+		menu2();
+		
+	}
+	if(no == 3)
+	{
+		menu3();
+		
+	}
+	if(no == 4)
+	{
+		
+	}
+	
+	/* highSpeedRail hsr("input.txt"); 
+   hsr.getDistance("广州","北京");
+   string a ,b;
+   cout<<"请输入想要查询的车站距离："<<endl;
+   cout<<"出发站点：";
+   cin>>a;
+   cout<<endl<<"目标站点：";
+   cin>>b;
+   hsr.getDistance(a,b);*/
+    }
+}
+
+void menu1()
+{
+	string string1;
+	char bo;
+	system("cls");//清屏 
+	cout<<endl<<"请输入要添加的站台名称："<<endl;
+	cin>>string1;
+	hsr.addStation(string1);
+	
+	while(1)
+	{
+		cout<<"是否继续添加？是（Y）/否（N）"<<endl;
+		cin >> bo;
+	    if(tolower(bo) == 'y')
+	    {
+	    	cout<<endl<<"请输入要添加的站台名称："<<endl;
+			cin>>string1;
+         	hsr.addStation(string1);
+         	continue;
+	    }
+	    if(tolower(bo) == 'n')
+	    {
+		    break;
+	    }
+	    else
+	    {
+    		cout<<"输入错误！"<<endl;
+	        continue;
+	    }
+    }
+    return;
+}
+
+void menu2()
+{
+	string string1,string2;
+	char bo;
+	int di;
+	system("cls");//清屏 
+	cout<<endl<<"请输入要添加的线路的出发站点名、目的站点名和站点间距离："<<endl;
+	cout<<"出发站点：";
+    cin>>string1;
+    cout<<endl<<"目标站点：";
+    cin>>string2;
+    cout<<endl<<"站点间距离：";
+    cin>>di;   
+	hsr.addRailWay(string1,string2,di);
+	
+	while(1)
+	{
+		cout<<"是否继续添加？是（Y）/否（N）"<<endl;
+		cin >> bo;
+	    if(tolower(bo) == 'y')
+	    {
+           	cout<<endl<<"请输入要添加的线路的出发站点名、目的站点名和站点间距离："<<endl;
+        	cout<<"出发站点：";
+            cin>>string1;
+            cout<<endl<<"目标站点：";
+            cin>>string2;
+            cout<<endl<<"站点间距离：";
+            cin>>di;   
+          	hsr.addRailWay(string1,string2,di);
+         	continue;
+	    }
+	    if(tolower(bo) == 'n')
+	    {
+		     break;
+	    }
+	    else
+	    {
+    		cout<<"输入错误！"<<endl;
+	        continue;
+	    }
+    }
+    return;
+}
+
+
+void menu3()
+{
+	string string1,string2;
+	char bo;
+	
+	system("cls");//清屏 
+	cout<<endl<<"请输入要查询的出发站点名和目的站点名："<<endl;
+	cout<<"出发站点：";
+    cin>>string1;
+    cout<<endl<<"目标站点：";
+    cin>>string2;
+  
+	hsr.getDistance(string1,string2);
+	
+	while(1)
+	{
+		cout<<"是否继续查询？是（Y）/否（N）"<<endl;
+		cin >> bo;
+	    if(tolower(bo) == 'y')
+	    {
+           		cout<<endl<<"请输入要查询的出发站点名和目的站点名："<<endl;
+             	cout<<"出发站点：";
+                cin>>string1;
+                cout<<endl<<"目标站点：";
+                cin>>string2;  
+               	hsr.getDistance(string1,string2);
+             	continue;
+	    }
+	    if(tolower(bo) == 'n')
+	    {
+		    break;
+	    }
+	    else
+	    {
+    		cout<<"输入错误！"<<endl;
+	        continue;
+	    }
+    }
+    return;
+}
 
 /***********************************************************/
 /* Construction function to build a network                */
@@ -261,7 +447,21 @@ void highSpeedRail::addRailWay(string station1,string station2,int cost)
 	
 	if(!isExisted(station1) || !isExisted(station2)) 
     {
-		cout<<"站台名不存在"<<endl;
+		if(isExisted(station1))
+		{
+			cout<<station2<<" 站台名不存在，输入错误！"<<endl;
+			
+		}
+		else if(isExisted(station2))
+		{
+			cout<<station1<<" 站台名不存在，输入错误！"<<endl;
+				
+		}
+		else 
+		{
+			cout<<station1 << " "<<station2<<" 站台名不存在，输入错误！"<<endl;
+			
+		}			
 		return ;
 	}
 	ArcNode *s =new ArcNode;
@@ -288,8 +488,22 @@ void highSpeedRail::getDistance(string station1, string station2)
 	b = getIndex(station2);
 	if(a == -1 || b == -1)
 	{
-		cout<<"Error! Station do not exist!"<<endl;
-		return  ;
+		if(isExisted(station1))
+		{
+			cout<<station2<<" 站台名不存在，输入错误！"<<endl;
+			
+		}
+		else if(isExisted(station2))
+		{
+			cout<<station1<<" 站台名不存在，输入错误！"<<endl;
+				
+		}
+		else 
+		{
+			cout<<station1 << " "<<station2<<" 站台名不存在，输入错误！"<<endl;
+			
+		}			
+		return ;
 	}
 	
 	bool known[Maxsize]; //to indicate whether the shortest distance to a vertix is known 
@@ -350,6 +564,7 @@ void highSpeedRail::getDistance(string station1, string station2)
 int main()
 {
    //highSpeedRail hsr(5,5);
+   /*
    highSpeedRail hsr("input.txt"); 
    hsr.getDistance("广州","北京");
    string a ,b;
@@ -359,5 +574,7 @@ int main()
    cout<<endl<<"目标站点：";
    cin>>b;
    hsr.getDistance(a,b);
+   */
+   menu();
    return 0;
 }
