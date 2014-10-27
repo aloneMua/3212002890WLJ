@@ -417,7 +417,7 @@ int highSpeedRail::getIndex(string station)
 	        return i;
 	
 	// if do not get index successfully
-	cout << "Fail in getting index! Station "<< station << " do not existed！" << endl;
+	//cout << "Fail in getting index! Station "<< station << " do not existed！" << endl;
 	return -1;
 	
 }
@@ -484,10 +484,8 @@ void highSpeedRail::addRailWay(string station1,string station2,int cost)
 void highSpeedRail::getDistance(string station1, string station2)
 {
 	int a, b;//source and destination	
-	a = getIndex(station1);
-	b = getIndex(station2);
-	if(a == -1 || b == -1)
-	{
+	if(!isExisted(station1) || !isExisted(station2)) 
+    {
 		if(isExisted(station1))
 		{
 			cout<<station2<<" 站台名不存在，输入错误！"<<endl;
@@ -505,7 +503,9 @@ void highSpeedRail::getDistance(string station1, string station2)
 		}			
 		return ;
 	}
-	
+	a = getIndex(station1);
+	b = getIndex(station2);
+		
 	bool known[Maxsize]; //to indicate whether the shortest distance to a vertix is known 
 	int dis[Maxsize];    //to store temporary shortest distance from station1 to a vertix
 	int sum = 0;         //to determine whether  is time to stop
