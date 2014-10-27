@@ -25,7 +25,7 @@ struct ArcNode
 struct VertexNode           
 {
     string vertex;             //数据域，存放顶点信息
-    int count;
+    int count;               //数据域，存放边表大小 
 	ArcNode*firstedge;      //指针域，指向边表中第一个结点
 };
 
@@ -52,7 +52,7 @@ private:
 
 /***********************************************************/
 /* Construction function to build a network                */
-/* with n station and e edges                              */
+/* with n station and e edges, input from terminal         */
 /***********************************************************/                      
 highSpeedRail::highSpeedRail(int n, int e)
 {
@@ -86,20 +86,42 @@ highSpeedRail::highSpeedRail(int n, int e)
 	        cin>>station1;
 		    cin>>station2;
 			cin>>cost; 
-			if(isExisted(station1) && isExisted(station2)) 
-            {
-			   ArcNode *s =new ArcNode;
-			   int i = getIndex(station2);
-       	       s->adjvex =i;                     //建立一个新的边表结点，即新的线路
-               s->distance=cost;
-			   s->next = NULL;                 
-			   int j = getIndex(station1);
-	           s->next = adjlist[j].firstedge;   //将结点插入到第j个边表的表头
-	           adjlist[j].firstedge = s;  
-	           adjlist[j].count ++;
+			while(!isExisted(station1) || !isExisted(station2)) 
+			{
+				if(isExisted(station1))
+			    {
+				    cout<<station2<<" 站台名不存在，请重新输入两个站台的名字和站台之间的距离(单位：km)："<<endl;
+				    cin>>station1;
+		            cin>>station2;
+			        cin>>cost; 
+			    }
+			    else if(isExisted(station2))
+			    {
+				    cout<<station1<<" 站台名不存在，请重新输入两个站台的名字和站台之间的距离(单位：km)："<<endl;
+				    cin>>station1;
+		            cin>>station2;
+		        	cin>>cost; 
+			    }
+			    else 
+			    {
+     				cout<<station1 << " "<<station2<<" 站台名不存在，请重新输入两个站台的名字和站台之间的距离(单位：km)："<<endl;
+	    			cin>>station1;
+        		    cin>>station2;
+			        cin>>cost; 
+		    	}	
 			}
-			else
-				cout<<"站台名不存在！"<<endl;
+			
+            //若输入正确 
+			ArcNode *s =new ArcNode;
+			int i = getIndex(station2);
+       	    s->adjvex =i;                     //建立一个新的边表结点，即新的线路
+            s->distance=cost;
+			s->next = NULL;                 
+			int j = getIndex(station1);
+	        s->next = adjlist[j].firstedge;   //将结点插入到第j个边表的表头
+	        adjlist[j].firstedge = s;  
+	        adjlist[j].count ++;
+			
 	   }
 
 }
@@ -209,7 +231,7 @@ int highSpeedRail::getIndex(string station)
 	        return i;
 	
 	// if do not get index successfully
-	cout << "Fail in getting index!" << endl;
+	cout << "Fail in getting index! Station "<< station << " do not existed！" << endl;
 	return -1;
 	
 }
@@ -232,7 +254,7 @@ void highSpeedRail::addStation(string station)
 }
 
 /******************************************************/
-/* This is a program to add a Railway                 */ 
+/* This is a function to add a Railway                */ 
 /******************************************************/
 void highSpeedRail::addRailWay(string station1,string station2,int cost)
 {
@@ -330,5 +352,12 @@ int main()
    //highSpeedRail hsr(5,5);
    highSpeedRail hsr("input.txt"); 
    hsr.getDistance("广州","北京");
+   string a ,b;
+   cout<<"请输入想要查询的车站距离："<<endl;
+   cout<<"出发站点：";
+   cin>>a;
+   cout<<endl<<"目标站点：";
+   cin>>b;
+   hsr.getDistance(a,b);
    return 0;
 }
