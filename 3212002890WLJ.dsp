@@ -101,6 +101,10 @@ SOURCE=.\highSpeedRail.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\menu.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\VertexNode.h
 # End Source File
 # End Group

@@ -1,3 +1,0 @@
-guangzhou beijing 600
-shanghai changsha 300
-guangzhou shanghai 600
