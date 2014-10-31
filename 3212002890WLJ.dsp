@@ -107,7 +107,6 @@ SOURCE=.\VertexNode.h
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # Begin Source File
 
 SOURCE=.\rail.txt
@@ -116,5 +115,6 @@ SOURCE=.\rail.txt
 
 SOURCE=.\station.txt
 # End Source File
+# End Group
 # End Target
 # End Project

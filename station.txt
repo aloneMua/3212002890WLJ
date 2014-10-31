@@ -1,7 +1,5 @@
-广州
-北京
-南京
-香港
-杭州
-坪石
-番禺
+guangzhou
+beijing
+shanghai
+changsha
+韶关
